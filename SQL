@@ -1,0 +1,329 @@
+
+#=================================Day 1======================================
+
+CREATE DATABASE collge;
+
+USE collge;
+
+CREATE TABLE students (
+id INT PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+age INT,
+branch VARCHAR(50),
+email VARCHAR(50) UNIQUE,
+created_at DATE
+);
+
+
+INSERT INTO students
+VALUES 
+(1,"dhiraj",22,"DS","dhiraj@gmail.com",CURDATE()),
+(2,"raj",21,"DS","raj@gmail.com",CURDATE()),
+(3,"Amit",23,"IT","amit@gmail.com",CURDATE()),
+(5,"ram",22,"AIDS","ram@gmail.com",CURDATE()),
+(6,"Gaurav",19,"Mech","gaurav@gmail.com",CURDATE()),
+(7,"Om",25,"Comp","Om@gmail.com",CURDATE());
+
+
+SELECT * from students;
+SELECT name ,branch from students;
+
+Update students
+set branch="com"
+where id=3;
+
+#=================================Day 2======================================
+SELECT * from students;
+SELECT name ,branch from students;
+
+Select name 
+from students
+where age>20;
+
+Select name 
+from students
+where branch='DS';
+
+Select name 
+from students
+where age between 18 and 22;
+
+Select name 
+from students
+where branch='DS' or branch='Comp';
+
+Select name 
+from students
+where name like 'A%';
+
+Select name 
+from students
+where email like '%gmail.com';
+
+
+
+Select name,age 
+from students 
+order by age ASC;
+
+Select name,age 
+from students 
+order by age DESC;
+
+#=================================Day 3======================================
+
+
+-- 1. Count total number of students.
+SELECT COUNT(*) FROM students;
+
+-- 2. Find average age of students.
+SELECT AVG(age) FROM students;
+
+-- 3. Find maximum age.
+SELECT MAX(age) FROM students;
+
+-- 4. Find minimum age.
+SELECT MIN(age) FROM students;
+
+-- 5. Count number of students in each branch.
+SELECT branch ,COUNT(*)
+FROM students
+GROUP BY branch;
+
+-- 6. Find average age branch-wise.
+SELECT branch ,AVG(age)
+FROM students
+GROUP BY branch;
+
+-- 7. Display branch names where total students are more than 1. (Use HAVING)
+SELECT branch ,count(*)
+FROM students
+GROUP BY branch
+HAVING count(*)>1;
+
+#=================================Day 4======================================
+ -- 1. Create a new table named: courses
+
+-- Columns:
+-- - course_id (Primary Key)
+-- - course_name (NOT NULL)
+-- - duration_months
+-- - fee (DEFAULT 10000)
+
+CREATE TABLE courses(
+ course_id INT PRIMARY KEY,
+ course_name VARCHAR(50) NOT NULL,
+ duration_months INT,
+ fee INT DEFAULT 10000
+ );
+
+
+-- Insert at least 4 course records.
+INSERT INTO courses
+VALUES 
+(1,"DSA",2,29999),
+(2,"ML",4,9999),
+(3,"Data Science",6,40000),
+(4,"Computer Network",1,5000),
+(5,"DAA",5,15000);
+
+Select * from courses;
+-- Now perform the following operations:
+-- 1. Add a new column: instructor_name
+ALTER TABLE courses
+ADD COLUMN instructor_name VARCHAR(100);
+
+-- 2. Add UNIQUE constraint on course_name
+ALTER TABLE courses
+ADD CONSTRAINT course_name UNIQUE (course_name);
+
+-- 3. Update instructor_name for some records
+SET SQL_SAFE_UPDATES = 0;
+UPDATE courses
+SET instructor_name = "AK Kumar"
+WHERE instructor_name IS NULL;
+
+-- 4. Drop the column duration_months
+ALTER TABLE courses
+DROP COLUMN duration_months;
+
+-- 5. Display all records
+desc courses;
+Select * from courses;
+#=================================Day 5======================================
+-- Use the same database: college
+
+-- Create two tables.
+
+-- Table 1: students
+
+-- Columns:
+-- - id (Primary Key)
+-- - name
+-- - branch
+
+-- already done before
+
+-- Table 2: marks
+
+-- Columns:
+-- - student_id
+-- - subject
+-- - marks
+
+CREATE TABLE marks (
+student_id INT,
+subject VARCHAR(100),
+marks INT);
+
+INSERT INTO marks 
+VALUES(1,"DSA",89),
+(2,"CCN",69),
+(3,"ML",80),
+(4,"Math",70),
+(5,"DSA",35),
+(6,"DSA",50);
+
+select * from marks;
+
+-- Now write queries for:
+
+-- 1. Display student name and marks using INNER JOIN.
+
+  SELECT students.name,marks.marks
+  FROM students
+  INNER JOIN marks
+  ON students.id = marks.student_id;
+-- 2. Display student name, subject and marks.
+  SELECT students.name,marks.subject,marks.marks
+  FROM students
+  INNER JOIN marks
+  ON students.id = marks.student_id;
+-- 3. Display students who have marks greater than 70.
+  SELECT students.name,marks.marks
+  FROM students
+  INNER JOIN marks
+  ON students.id = marks.student_id
+  WHERE marks.marks>70;
+-- 4. Display students from branch = 'CSE' along with their marks.
+
+  SELECT students.name,branch,marks.marks
+  FROM students
+  INNER JOIN marks
+  ON students.id = marks.student_id
+   WHERE branch="DS";
+
+
+#=================================Day 6======================================
+
+-- Now write queries for:
+
+-- 1. Display all students and their marks using LEFT JOIN.
+  SELECT students.name,marks.marks
+  FROM students
+  LEFT JOIN marks
+  ON students.id = marks.student_id;
+  
+-- 2. Display student name, subject and marks using LEFT JOIN.
+  SELECT students.name,marks.subject,marks.marks
+  FROM students
+  LEFT JOIN marks
+  ON students.id = marks.student_id;
+  
+-- 3. Display all marks along with student names using RIGHT JOIN.
+SELECT students.name,marks.marks
+  FROM students
+  RIGHT JOIN marks
+  ON students.id = marks.student_id;
+  
+-- 4. Find students who do NOT have any marks.
+SELECT students.name,marks.marks
+  FROM students
+  LEFT JOIN marks
+  ON students.id = marks.student_id
+  WHERE marks IS NULL;
+  
+-- 5. Display students from branch = 'CSE' along with their marks using LEFT JOIN.
+  SELECT students.name,marks.marks
+  FROM students
+  LEFT JOIN marks
+  ON students.id = marks.student_id
+  WHERE branch="DS";
+  
+ -- =====================================Day 7=======================================
+ 
+ 
+--  mark
+-- - student_id
+-- - subject
+-- - marks
+CREATE TABLE mark (
+student_id INT,
+subject VARCHAR(100),
+marks INT);
+
+-- Insert records for multiple subjects (example: DBMS, Java, OS).
+ INSERT INTO mark (student_id, subject, marks) VALUES
+(1, 'DBMS', 85),
+(1, 'Java', 78),
+(1, 'OS', 82),
+
+(2, 'DBMS', 75),
+(2, 'Java', 80),
+(2, 'OS', 70),
+
+(3, 'DBMS', 90),
+(3, 'Java', 88),
+(3, 'OS', 92),
+
+(4, 'DBMS', 65),
+(4, 'Java', 72),
+(4, 'OS', 68);
+
+select * from mark;
+
+-- Now write queries for:
+
+-- 1. Display student name, subject and marks using INNER JOIN.
+ SELECT students.name,mark.subject,mark.marks
+ FROM students
+ INNER JOIN mark
+ ON students.id=mark.student_id;
+
+-- 2. Display students who scored more than 70 marks.
+ SELECT students.name,mark.subject,mark.marks
+ FROM students
+ INNER JOIN mark
+ ON students.id=mark.student_id
+ WHERE mark.marks>70;
+ 
+-- 3. Display students from branch = 'DS' along with their marks.
+SELECT students.name,mark.subject,mark.marks
+ FROM students
+ INNER JOIN mark
+ ON students.id=mark.student_id
+ WHERE students.branch="DS";
+ 
+-- 4. Display students who scored less than 50.
+
+ SELECT students.name,mark.marks
+ FROM students
+ LEFT JOIN mark
+ ON students.id=mark.student_id
+ WHERE mark.marks<50;
+ 
+ 
+-- 5. Display students and marks only for subject = 'Java'.
+ SELECT students.name,mark.marks,mark.subject
+ FROM students
+ LEFT JOIN mark
+ ON students.id=mark.student_id
+ WHERE mark.subject="Java";
+
+-- 6. Display students who do NOT have marks (use LEFT JOIN).
+
+ SELECT students.name,mark.marks,mark.subject
+ FROM students
+ LEFT JOIN mark
+ ON students.id=mark.student_id
+ WHERE mark.marks is null;
